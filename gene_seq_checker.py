@@ -1,8 +1,8 @@
 import numpy
 import sys
-from check_cost import read_cost_matrix
+from check_cost import read_cost_matrix, gen_matrix
 
-def edit_distance(A, B, loss_matrix): 
+def edit_distance(A, B, loss_matrix, x_indexdict, y_indexdict): 
     m = len(A)
     n = len(B)
     Edit = [[n] for i in range [0,m]]
@@ -21,7 +21,7 @@ def edit_distance(A, B, loss_matrix):
             Edit[i, j] = min(insert, delete, replace)
             ptr[i, j] = numpy.argmin([insert, delete, replace])
             # ptr[i,j] stores operation used to reach [i, j]:  0 for insert, 1 for delete, 2 for replace
-    return Edit, ptr
+    return Edit[m, n], ptr
         
 def backtrack_alignment(A, B, ptr, m, n):
     aligned_seqA, aligned_seqB = [], []
@@ -43,22 +43,38 @@ def backtrack_alignment(A, B, ptr, m, n):
     
     # Return the reversed aligned sequences
     return ''.join(reversed(aligned_seqA)), ''.join(reversed(aligned_seqB))
-            
+
+def read_sequences(inputfile):
+    # Reads Input Fie
+    with open(inputfile, 'r') as file:
+        return [line.strip().split(',') for line in file]
+
+def write_output(alignments):
+    # Writes alignment result to imp3output.txt (we can change the naming later)
+    with open("imp3output.txt", 'w') as file:
+        for seq1, seq2, cost in alignments:
+            file.write(f"{seq1},{seq2}:{cost}\n")
+
+def compute_alignment(A, B, loss_matrix, x_indexdict, y_indexdict):
+    cost, ptr = edit_distance(A, B, loss_matrix, x_indexdict, y_indexdict)
+    alignment = backtrack_alignment(A, B, ptr, len(A), len(B))
+    return alignment, cost
 
 def main(argv):
     print('_' * 100)
 
     # Default file paths
+    inputfile = 'imp2input.txt'
     costfile = 'imp2cost.txt'
     outputfile = 'imp2output.txt'  # The primary solution file
     second_outputfile = ''         # optional second solution file
     log_results = 'cost_check_results.txt'
 
     loss_matrix, x_indexdict, y_indexdict = read_cost_matrix(fns=costfile)
-
-    # Import from file to arrays A, B
-
-    Edit, ptr = edit_distance(A, B, cost_matrix)
+    
+    sequences = read_sequences(inputfile)
+    alignments = [compute_alignment(A, B, loss_matrix, x_indexdict, y_indexdict) for A, B in sequences]
+    write_output(alignments)    
 
 if __name__ == "__main__":
     main(sys.argv[1:])
