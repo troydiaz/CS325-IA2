@@ -18,8 +18,10 @@ def edit_distance(A, B, loss_matrix, x_indexdict, y_indexdict):
             insert = Edit[i][j - 1] + loss_matrix[1][x_indexdict[B[j - 1]]]
             delete = Edit[i - 1][j] + loss_matrix[y_indexdict[A[i - 1]]][1]
             replace = Edit[i - 1][j - 1] + loss_matrix[y_indexdict[A[i - 1]]][x_indexdict[B[j - 1]]]
-            Edit[i][j] = min(insert, delete, replace)
-            ptr[i][j] = numpy.argmin([insert, delete, replace])
+            operations = [insert, delete, replace]
+            operation = numpy.argmin(operations)
+            ptr[i][j] = operation
+            Edit[i][j] = operations[operation]
             # ptr[i,j] stores operation used to reach [i, j]:  0 for insert, 1 for delete, 2 for replace
     return Edit[m][n], ptr
         
