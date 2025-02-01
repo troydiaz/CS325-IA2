@@ -31,6 +31,29 @@ def cost_index(letter) -> int:
     for i in range[1, m + 1]:
         if C[0][i] == letter:
             return i
+        
+        
+def backtrack_alignment(A, B, ptr, m, n):
+    aligned_seqA, aligned_seqB = [], []
+    i, j = m, n
+    
+    while i > 0 or j > 0:
+        if ptr[i][j] == (i-1, j-1):
+            aligned_seqA.append(A[i-1])
+            aligned_seqA.append(B[i-1])
+            i, j = i-1, j-1
+        elif ptr[i][j] == (i-1, j):
+            aligned_seqA.append(A[i-1])
+            aligned_seqB.append('-')
+            i = i-1
+        else:
+            aligned_seqA.append('-')
+            aligned_seqB.append(B[j-1])
+            j = j-1
+    
+    # Return the reversed aligned sequences
+    return ''.join(reversed(aligned_seqA)), ''.join(reversed(aligned_seqB))
+            
 
 def main(argv):
     print('_' * 100)
