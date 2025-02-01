@@ -22,3 +22,7 @@ with imp2input.txt and imp2cost.txt.
 
 * python check_cost.py passes successfully, indicating no formatting error and the reported costs are
 consistent with the provided alignments.
+
+## Install numpy
+
+brew install numpy
