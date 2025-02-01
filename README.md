@@ -4,14 +4,14 @@
 To help you debug your program and run the verification your self,
 you can use the provided checker.py with the following command:
 
-'''python check_cost.py -c <costfilename> -o <outputfilename>'''
+```python check_cost.py -c <costfilename> -o <outputfilename>```
 
 If no filenames are provided, it will assume a default name for cost file imp2cost.txt and default name for output file imp2output.txt. 
 
 You can further verify if your output correctly matches the optimal cost specified by the provided
 solution file with the following command:
 
-'''python check_cost.py -c <costfilename> -o <outputfilename> -s <solutionfilename>'''
+```python check_cost.py -c <costfilename> -o <outputfilename> -s <solutionfilename>```
 
 If solutionfilename is not provided, it will only check if the provided cost matches the provided alignment in the outputfile.
 
