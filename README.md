@@ -15,7 +15,6 @@ solution file with the following command:
 
 If solutionfilename is not provided, it will only check if the provided cost matches the provided alignment in the outputfile.
 
-
 ## Checklist for code expectation:
 
 * python <your_script_name>.py should generate imp2output.txt when placed in the same folder
