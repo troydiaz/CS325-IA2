@@ -5,23 +5,23 @@ from check_cost import read_cost_matrix, gen_matrix
 def edit_distance(A, B, loss_matrix, x_indexdict, y_indexdict): 
     m = len(A)
     n = len(B)
-    Edit = [[n] for i in range [0,m]]
-    ptr = numpy.zeros((m, n))
-    Edit[0, 0] = loss_matrix[1, 1]
-    for j in range[1, n + 1]:
-        Edit[0, j] = loss_matrix[1, x_indexdict.B[j - 1]]
-    for i in range [1, m + 1]:
-        Edit[i, 0] = loss_matrix[y_indexdict.A[i - 1], 1]
+    Edit = numpy.zeros((m + 1, n + 1))
+    ptr = numpy.zeros((m + 1, n + 1))
+    Edit[0, 0] = loss_matrix[1][1]
+    for j in range(1, n + 1):
+        Edit[0][j] = loss_matrix[1][x_indexdict[B[j - 1]]]
+    for i in range (1, m + 1):
+        Edit[i][0] = loss_matrix[y_indexdict[A[i - 1]]][1]
 
-    for i in range [1, m + 1]:
-        for j in range [1, n + 1]:
-            insert = Edit[i, j - 1] + loss_matrix[1, x_indexdict.B[j - 1]]
-            delete = Edit[i - 1, j] + loss_matrix[y_indexdict.A[i - 1], 1]
-            replace = Edit[i - 1, j - 1] + loss_matrix[y_indexdict.A[i - 1], x_indexdict.B[j - 1]]
-            Edit[i, j] = min(insert, delete, replace)
-            ptr[i, j] = numpy.argmin([insert, delete, replace])
+    for i in range (1, m + 1):
+        for j in range (1, n + 1):
+            insert = Edit[i][j - 1] + loss_matrix[1][x_indexdict[B[j - 1]]]
+            delete = Edit[i - 1][j] + loss_matrix[y_indexdict[A[i - 1]]][1]
+            replace = Edit[i - 1][j - 1] + loss_matrix[y_indexdict[A[i - 1]]][x_indexdict[B[j - 1]]]
+            Edit[i][j] = min(insert, delete, replace)
+            ptr[i][j] = numpy.argmin([insert, delete, replace])
             # ptr[i,j] stores operation used to reach [i, j]:  0 for insert, 1 for delete, 2 for replace
-    return Edit[m, n], ptr
+    return Edit[m][n], ptr
         
 def backtrack_alignment(A, B, ptr, m, n):
     aligned_seqA, aligned_seqB = [], []
@@ -30,7 +30,7 @@ def backtrack_alignment(A, B, ptr, m, n):
     while i > 0 or j > 0:
         if ptr[i][j] == 2:
             aligned_seqA.append(A[i-1])
-            aligned_seqA.append(B[i-1])
+            aligned_seqB.append(B[j-1])
             i, j = i-1, j-1
         elif ptr[i][j] == 1:
             aligned_seqA.append(A[i-1])
