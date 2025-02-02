@@ -17,8 +17,8 @@ def edit_distance(A, B, loss_matrix, x_indexdict, y_indexdict):
 
     for i in range (1, m + 1):
         for j in range (1, n + 1):
-            insert = Edit[i][j - 1] + loss_matrix[1][x_indexdict[B[j - 1]]]
-            delete = Edit[i - 1][j] + loss_matrix[y_indexdict[A[i - 1]]][1]
+            insert = Edit[i][j - 1] + loss_matrix[y_indexdict['-']][x_indexdict[B[j - 1]]]
+            delete = Edit[i - 1][j] + loss_matrix[y_indexdict[A[i - 1]]][x_indexdict['-']]
             replace = Edit[i - 1][j - 1] + loss_matrix[y_indexdict[A[i - 1]]][x_indexdict[B[j - 1]]]
             operations = [insert, delete, replace]
             operation = numpy.argmin(operations)
@@ -57,7 +57,7 @@ def write_output(alignments, outputfile):
     # Writes alignment result to imp3output.txt (we can change the naming later)
     with open(outputfile, 'w') as file:
         for seq1, seq2, cost in alignments:
-            file.write(f"{seq1},{seq2}:{cost}\n")
+            file.write(f"{seq1},{seq2}:{cost:.0f}\n")
 
 def compute_alignment(A, B, loss_matrix, x_indexdict, y_indexdict):
     cost, ptr = edit_distance(A, B, loss_matrix, x_indexdict, y_indexdict)
