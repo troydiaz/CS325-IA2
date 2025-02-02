@@ -7,12 +7,12 @@ def edit_distance(A, B, loss_matrix, x_indexdict, y_indexdict):
     n = len(B)
     Edit = numpy.zeros((m + 1, n + 1))
     ptr = numpy.zeros((m + 1, n + 1))
-    Edit[0, 0] = loss_matrix[1][1]
+    Edit[0, 0] = loss_matrix[y_indexdict['-']][x_indexdict['-']]
     for j in range(1, n + 1):
-        Edit[0][j] = loss_matrix[1][x_indexdict[B[j - 1]]]
+        Edit[0][j] = Edit[0][j - 1] + loss_matrix[y_indexdict['-']][x_indexdict[B[j - 1]]]
         ptr[0][j] = 0
     for i in range (1, m + 1):
-        Edit[i][0] = loss_matrix[y_indexdict[A[i - 1]]][1]
+        Edit[i][0] = Edit[i - 1][0] + loss_matrix[y_indexdict[A[i - 1]]][x_indexdict['-']]
         ptr[i][0] = 1
 
     for i in range (1, m + 1):
@@ -40,7 +40,7 @@ def backtrack_alignment(A, B, ptr, m, n):
             aligned_seqA.append(A[i-1])
             aligned_seqB.append('-')
             i = i-1
-        else:
+        elif ptr[i][j] == 0:
             aligned_seqA.append('-')
             aligned_seqB.append(B[j-1])
             j = j-1
